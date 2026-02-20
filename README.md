@@ -3,11 +3,11 @@ A full-stack Lorry Load Management Web Application developed using Flask, SQLAlc
 
 # **🚛 Lorry Load Management System**
 
-**📌 Overview**
+### **📌 Overview**
 
 This is a Flask-based web application developed to manage lorry transport operations. It allows users to track loads, calculate total revenue, expenses, and profit, and generate reports with filtering options.
 
-**🔧 Technologies Used**
+### **🔧 Technologies Used**
 
 - Python
 
@@ -25,7 +25,7 @@ This is a Flask-based web application developed to manage lorry transport operat
 
 - Bootstrap
 
-**✨ Features**
+### **✨ Features**
 
 - User Authentication (Login / Logout)
 
@@ -41,7 +41,7 @@ This is a Flask-based web application developed to manage lorry transport operat
 
 - Mobile and Desktop Responsive
 
-**📊 Dashboard Includes**
+### **📊 Dashboard Includes**
 
 - Total Revenue
 
@@ -53,6 +53,6 @@ This is a Flask-based web application developed to manage lorry transport operat
 
 - Monthly Revenue & Expense Chart
 
-**🎯 Purpose**
+### **🎯 Purpose**
 
 Designed for small transport business owners to digitally manage their daily lorry operations and improve financial tracking efficiency.
