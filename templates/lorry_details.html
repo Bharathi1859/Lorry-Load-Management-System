@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="page-header">
+    <div>
+        <h2>Lorry Details</h2>
+        <p>{{ lorry.vehicle_number }} - Performance Overview</p>
+    </div>
+
+    <div>
+        <a href="{{ url_for('load.add_load', lorry_id=lorry.id) }}" class="btn-primary">
+            + Add Load
+        </a>
+    </div>
+</div>
+
+<!-- ================= LORRY INFO ================= -->
+
+<div class="info-card">
+
+    <div class="info-grid">
+        <div>
+            <strong>Vehicle Number:</strong>
+            <p>{{ lorry.vehicle_number }}</p>
+        </div>
+
+        <div>
+            <strong>Driver Name:</strong>
+            <p>{{ lorry.driver_name }}</p>
+        </div>
+
+        <div>
+            <strong>Driver Phone:</strong>
+            <p>{{ lorry.driver_phone }}</p>
+        </div>
+
+        <div>
+            <strong>Status:</strong>
+            {% if lorry.status == "active" %}
+                <span class="status active">Active</span>
+            {% else %}
+                <span class="status inactive">Inactive</span>
+            {% endif %}
+        </div>
+    </div>
+
+</div>
+
+<!-- ================= SUMMARY SECTION ================= -->
+
+<div class="summary-cards">
+
+    <div class="summary-card revenue">
+        <h4>Total Revenue</h4>
+        <p>₹ {{ total_revenue }}</p>
+    </div>
+
+    <div class="summary-card expense">
+        <h4>Total Expense</h4>
+        <p>₹ {{ total_expense }}</p>
+    </div>
+
+    <div class="summary-card profit">
+        <h4>Total Profit</h4>
+        <p>₹ {{ total_profit }}</p>
+    </div>
+
+</div>
+
+<!-- ================= LOAD TABLE ================= -->
+
+<div class="table-section">
+
+    <h3>Load History</h3>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>From</th>
+                <th>To</th>
+                <th>Freight</th>
+                <th>Expense</th>
+                <th>Profit</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for load in loads %}
+            <tr>
+                <td>{{ load.date }}</td>
+                <td>{{ load.from_location }}</td>
+                <td>{{ load.to_location }}</td>
+                <td>₹ {{ load.freight_amount }}</td>
+                <td>₹ {{ load.total_expense }}</td>
+
+                <td>
+                    {% if load.profit >= 0 %}
+                        <span class="profit">₹ {{ load.profit }}</span>
+                    {% else %}
+                        <span class="loss">₹ {{ load.profit }}</span>
+                    {% endif %}
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="6">No loads available</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="page-header">
+    <div>
+        <h2>Load Management</h2>
+        <p>Track revenue and expenses for each trip</p>
+    </div>
+
+    <div>
+        <a href="{{ url_for('load.add_load') }}" class="btn-primary">
+            + Add New Load
+        </a>
+
+    </div>
+       
+</div>
+
+<!-- ================= LORRY SUMMARY ================= -->
+
+<div class="summary-section">
+    <h3>Lorry Summary</h3>
+
+    {% for lorry in lorry_summary %}
+    <div class="summary-card">
+        <h4>{{ lorry.vehicle_number }}</h4>
+
+        <p><strong>Total Revenue:</strong> ₹ {{ lorry.total_revenue or 0 }}</p>
+        <p><strong>Total Expense:</strong> ₹ {{ lorry.total_expense or 0 }}</p>
+
+        {% if lorry.total_profit and lorry.total_profit >= 0 %}
+            <p class="profit"><strong>Total Profit:</strong> ₹ {{ lorry.total_profit }}</p>
+        {% else %}
+            <p class="loss"><strong>Total Profit:</strong> ₹ {{ lorry.total_profit or 0 }}</p>
+        {% endif %}
+    </div>
+    {% endfor %}
+</div>
+
+
+<!-- ================= LOAD TABLE ================= -->
+<div class="table-section">
+
+    <table>
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Lorry</th>
+                <th>From</th>
+                <th>To</th>
+                <th>Freight Amount</th>
+                <th>Total Expense</th>
+                <th>Profit</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for load in loads %}
+            <tr>
+                <td>{{ load.date }}</td>
+                <td><strong>{{ load.lorry.vehicle_number }}</strong></td>
+                <td>{{ load.from_location }}</td>
+                <td>{{ load.to_location }}</td>
+
+                <td>₹ {{ load.freight_amount }}</td>
+                <td>₹ {{ load.total_expense }}</td>
+
+                <td>
+                    {% if load.profit >= 0 %}
+                        <span class="profit">₹ {{ load.profit }}</span>
+                    {% else %}
+                        <span class="loss">₹ {{ load.profit }}</span>
+                    {% endif %}
+                </td>
+
+                 <td>
+                    <a href="{{ url_for('load.edit_load', load_id=load.id) }}" class="btn-edit">
+                         Edit
+                    </a>
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="8">No loads added yet</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+</div>
+
+{% endblock %}

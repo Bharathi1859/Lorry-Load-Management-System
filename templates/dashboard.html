@@ -1,0 +1,113 @@
+
+
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="dashboard-header">
+    <h2>Dashboard Overview</h2>
+    <p>Monitor your fleet performance and financial summary</p>
+</div>
+
+<!-- ================= KPI CARDS ================= -->
+<div class="cards">
+
+    <div class="card">
+        <h3>Total Revenue</h3>
+        <h2>₹ {{ total_revenue or 0 }}</h2>
+    </div>
+
+    <div class="card">
+        <h3>Total Expenses</h3>
+        <h2>₹ {{ total_expense or 0 }}</h2>
+    </div>
+
+    <div class="card">
+        <h3>Net Profit</h3>
+        <h2 class="{{ 'profit' if total_profit >= 0 else 'loss' }}">
+            ₹ {{ total_profit or 0 }}
+        </h2>
+    </div>
+
+    <div class="card">
+        <h3>Pending Dues</h3>
+        <h2 class="loss">₹ {{ total_due or 0 }}</h2>
+    </div>
+
+</div>
+
+<!-- ================= CHART SECTION ================= -->
+<div class="chart-section">
+    <h3>Revenue vs Expense (Monthly)</h3>
+    <canvas id="financeChart"></canvas>
+</div>
+
+<!-- ================= RECENT LOADS ================= -->
+<div class="table-section">
+    <h3>Recent Loads</h3>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Lorry</th>
+                <th>Route</th>
+                <th>Income</th>
+                <th>Expense</th>
+                <th>Profit</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for load in recent_loads %}
+            <tr>
+                <td>{{ load.date }}</td>
+                <td>{{ load.vehicle_number }}</td>
+                <td>{{ load.from_location }} → {{ load.to_location }}</td>
+                <td>₹ {{ load.income }}</td>
+                <td>₹ {{ load.total_expense }}</td>
+                <td class="{{ 'profit' if load.profit >= 0 else 'loss' }}">
+                    ₹ {{ load.profit }}
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="6">No loads available</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<!-- ================= CHART SCRIPT ================= -->
+<script>
+const ctx = document.getElementById('financeChart');
+
+new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: {{ chart_labels | tojson }},
+        datasets: [
+            {
+                label: 'Revenue',
+                data: {{ chart_revenue | tojson }},
+                backgroundColor: '#2563eb'
+            },
+            {
+                label: 'Expenses',
+                data: {{ chart_expense | tojson }},
+                backgroundColor: '#dc2626'
+            }
+        ]
+    },
+    options: {
+        responsive: true,
+        plugins: {
+            legend: {
+                position: 'top'
+            }
+        }
+    }
+});
+</script>
+
+{% endblock %}

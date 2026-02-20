@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="form-container">
+
+    <div class="form-header">
+        <h2>Add New Load</h2>
+        <a href="{{ url_for('load.loads') }}" class="btn-secondary">← Back</a>
+    </div>
+
+    <form method="POST" action="{{ url_for('load.add_load') }}" class="form-card">
+
+        <div class="form-grid">
+
+            <!-- BASIC DETAILS -->
+            <div class="form-group">
+                <label>Select Lorry</label>
+                <select name="lorry_id" required>
+                    {% for lorry in lorries %}
+                        <option value="{{ lorry.id }}">
+                            {{ lorry.vehicle_number }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Load Date</label>
+                <input type="date" name="date" required>
+            </div>
+
+            <div class="form-group">
+                <label>From Location</label>
+                <input type="text" name="from_location" required>
+            </div>
+
+            <div class="form-group">
+                <label>To Location</label>
+                <input type="text" name="to_location" required>
+            </div>
+
+            <!-- INCOME -->
+            <div class="form-group full-width">
+                <label>Freight Amount (Income)</label>
+                <input type="number" id="freight" name="freight_amount" required>
+            </div>
+
+            <!-- EXPENSES -->
+            <div class="form-group">
+                <label>Diesel Amount</label>
+                <input type="number" class="expense" name="diesel_amount" value="0">
+            </div>
+
+            <div class="form-group">
+                <label>RTO Amount</label>
+                <input type="number" class="expense" name="rto_amount" value="0">
+            </div>
+
+            <div class="form-group">
+                <label>Toll Amount</label>
+                <input type="number" class="expense" name="toll_amount" value="0">
+            </div>
+
+            <div class="form-group">
+                <label>Driver Bata</label>
+                <input type="number" class="expense" name="driver_bata" value="0">
+            </div>
+
+            <div class="form-group">
+                <label>Maintenance</label>
+                <input type="number" class="expense" name="maintenance_amount" value="0">
+            </div>
+
+            <div class="form-group">
+                <label>Other Expenses</label>
+                <input type="number" class="expense" name="other_expense" value="0">
+            </div>
+
+        </div>
+
+        <!-- CALCULATION BOX -->
+        <div class="calculation-box">
+            <p>Total Expense: ₹ <span id="totalExpense">0</span></p>
+            <p>Estimated Profit: ₹ <span id="profit">0</span></p>
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="btn-primary">Save Load</button>
+        </div>
+
+    </form>
+
+</div>
+
+<!-- JS Calculation -->
+<script>
+    const expenseInputs = document.querySelectorAll(".expense");
+    const freightInput = document.getElementById("freight");
+
+    function calculate() {
+        let totalExpense = 0;
+
+        expenseInputs.forEach(input => {
+            totalExpense += parseFloat(input.value) || 0;
+        });
+
+        let freight = parseFloat(freightInput.value) || 0;
+        let profit = freight - totalExpense;
+
+        document.getElementById("totalExpense").innerText = totalExpense;
+        document.getElementById("profit").innerText = profit;
+    }
+
+    expenseInputs.forEach(input => {
+        input.addEventListener("input", calculate);
+    });
+
+    freightInput.addEventListener("input", calculate);
+</script>
+
+{% endblock %}

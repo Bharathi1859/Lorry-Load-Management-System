@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="page-header">
+    <div>
+        <h2>Reports</h2>
+        <p>Monthly Profit & Expense Analysis</p>
+    </div>
+</div>
+
+<!-- ================= FILTER SECTION ================= -->
+
+<div class="filter-card">
+
+    <form method="GET" action="{{ url_for('report.reports') }}" class="filter-form">
+
+        <div class="form-group">
+            <label>Month</label>
+            <select name="month">
+                {% for m in range(1,13) %}
+                    <option value="{{ m }}" {% if selected_month == m %}selected{% endif %}>
+                        {{ m }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Year</label>
+            <input type="number" name="year" value="{{ selected_year }}">
+        </div>
+
+        <div class="form-group">
+            <button type="submit" class="btn-primary">Filter</button>
+        </div>
+
+    </form>
+
+</div>
+
+<!-- ================= SUMMARY ================= -->
+
+<div class="summary-cards">
+
+    <div class="summary-card revenue">
+        <h4>Total Revenue</h4>
+        <p>₹ {{ total_revenue }}</p>
+    </div>
+
+    <div class="summary-card expense">
+        <h4>Total Expense</h4>
+        <p>₹ {{ total_expense }}</p>
+    </div>
+
+    <div class="summary-card profit">
+        <h4>Total Profit</h4>
+        <p>₹ {{ total_profit }}</p>
+    </div>
+
+</div>
+
+<!-- ================= REPORT TABLE ================= -->
+
+<div class="table-section">
+
+    <h3>Load Details</h3>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Lorry</th>
+                <th>From</th>
+                <th>To</th>
+                <th>Freight</th>
+                <th>Expense</th>
+                <th>Profit</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for load in loads %}
+            <tr>
+                <td>{{ load.date }}</td>
+                <td>{{ load.lorry.vehicle_number }}</td>
+                <td>{{ load.from_location }}</td>
+                <td>{{ load.to_location }}</td>
+                <td>₹ {{ load.freight_amount }}</td>
+                <td>₹ {{ load.total_expense }}</td>
+
+                <td>
+                    {% if load.profit >= 0 %}
+                        <span class="profit">₹ {{ load.profit }}</span>
+                    {% else %}
+                        <span class="loss">₹ {{ load.profit }}</span>
+                    {% endif %}
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="7">No data for selected month</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+</div>
+
+{% endblock %}

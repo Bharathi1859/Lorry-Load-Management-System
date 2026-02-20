@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="page-header">
+    <div>
+        <h2>Lorry Management</h2>
+        <p>Manage all your fleet vehicles</p>
+    </div>
+
+    <div>
+        <a href="{{ url_for('lorry.add_lorry') }}" class="btn-primary">
+            + Add New Lorry
+        </a>
+    </div>
+</div>
+
+<!-- ================= LORRIES TABLE ================= -->
+<div class="table-section">
+
+    <table>
+        <thead>
+            <tr>
+                <th>Vehicle Number</th>
+                <th>Driver Name</th>
+                <th>Phone</th>
+                <th>Status</th>
+                <th>Total Loads</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for lorry in lorries %}
+            <tr>
+                <td><strong>{{ lorry.vehicle_number }}</strong></td>
+                <td>{{ lorry.driver_name }}</td>
+                <td>{{ lorry.driver_phone }}</td>
+
+                <td>
+                    {% if lorry.status == "active" %}
+                        <span class="status active">Active</span>
+                    {% else %}
+                        <span class="status inactive">Inactive</span>
+                    {% endif %}
+                </td>
+
+                <td>{{ lorry.total_loads or 0 }}</td>
+
+                <td>
+                    <a href="{{ url_for('lorry.lorry_details', lorry_id=lorry.id) }}" class="btn-view">
+                        View
+                    </a>
+
+                    
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="6">No lorries available</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+</div>
+
+{% endblock %}
